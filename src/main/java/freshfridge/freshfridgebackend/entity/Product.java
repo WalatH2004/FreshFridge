@@ -8,7 +8,7 @@ public class Product {
 
     @Id
     @Column(name = "productId")
-    private int productId;
+    private Integer productId;
 
     @Column(name = "naam")
     private String naam;
@@ -23,7 +23,7 @@ public class Product {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
