@@ -1,7 +1,8 @@
 package freshfridge.freshfridgebackend.controller;
 
 import freshfridge.freshfridgebackend.entity.Gebruiker;
-import freshfridge.freshfridgebackend.repository.GebruikerRepository;
+import freshfridge.freshfridgebackend.service.GebruikerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,26 +12,20 @@ import java.util.List;
 @RequestMapping("/api/gebruiker")
 public class GebruikerController {
 
-    private final GebruikerRepository gebruikerRepository;
+    private final GebruikerService gebruikerService;
 
-    public GebruikerController(GebruikerRepository gebruikerRepository) {
-        this.gebruikerRepository = gebruikerRepository;
-    }
-
-    @GetMapping
-    public List<Gebruiker> getAll() {
-        return gebruikerRepository.findAll();
+    public GebruikerController(GebruikerService gebruikerService) {
+        this.gebruikerService = gebruikerService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Gebruiker> getById(@PathVariable Integer id) {
-        return gebruikerRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(gebruikerService.getGebruiker(id));
     }
 
     @PostMapping
-    public Gebruiker create(@RequestBody Gebruiker gebruiker) {
-        return gebruikerRepository.save(gebruiker);
+    public ResponseEntity<Gebruiker> create(@RequestBody Gebruiker gebruiker) {
+        Gebruiker created = gebruikerService.createGebruiker(gebruiker);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 }
