@@ -1,5 +1,7 @@
 package freshfridge.freshfridgebackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,17 +18,18 @@ public class Gebruiker {
     @Column(name = "achternaam", nullable = false)
     private String achternaam;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "email", nullable = false)
     private String email;
 
-    public Integer getGebruikersnr() {
+    public Integer getGebruikernr() {
         return gebruikernr;
     }
 
-    public void setGebruikersnr(Integer gebruikernr) {
+    public void setGebruikernr(Integer gebruikernr) {
         this.gebruikernr = gebruikernr;
     }
 
