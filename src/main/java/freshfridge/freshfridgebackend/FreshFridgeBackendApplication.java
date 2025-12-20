@@ -9,5 +9,4 @@ public class FreshFridgeBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(FreshFridgeBackendApplication.class, args);
     }
-
 }
