@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class ProductInKoelkast {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pikId")
     private Integer pikId;
 
