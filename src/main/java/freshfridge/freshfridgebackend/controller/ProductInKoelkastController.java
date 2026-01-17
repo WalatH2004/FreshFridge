@@ -21,9 +21,8 @@ public class ProductInKoelkastController {
     @PostMapping
     public ResponseEntity<ProductInKoelkast> add(@RequestParam Integer productId,
                                                  @RequestParam Integer koelkastId,
-                                                 @RequestParam Integer scannerId,
                                                  @RequestBody ProductInKoelkast pik) {
-        ProductInKoelkast saved = pikService.addProductInKoelkast(pik, productId, koelkastId, scannerId);
+        ProductInKoelkast saved = pikService.addProductInKoelkast(pik, productId, koelkastId);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 

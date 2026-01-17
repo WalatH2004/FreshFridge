@@ -6,6 +6,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GebruikerServiceImpl implements GebruikerService {
 
@@ -16,6 +18,11 @@ public class GebruikerServiceImpl implements GebruikerService {
                                 PasswordEncoder passwordEncoder) {
         this.gebruikerRepository = gebruikerRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public List<Gebruiker> getAllGebruikers() {
+        return gebruikerRepository.findAll();
     }
 
     @Override

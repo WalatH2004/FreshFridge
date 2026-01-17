@@ -8,8 +8,7 @@ public interface ProductInKoelkastService {
 
     ProductInKoelkast addProductInKoelkast(ProductInKoelkast pik,
                                            Integer productId,
-                                           Integer koelkastId,
-                                           Integer scannerId);
+                                           Integer koelkastId);
 
     ProductInKoelkast getProductInKoelkast(Integer pikId);
 

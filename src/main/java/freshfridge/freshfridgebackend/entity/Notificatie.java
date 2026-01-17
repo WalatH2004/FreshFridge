@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class Notificatie {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notificatieId")
     private Integer notificatieId;
 

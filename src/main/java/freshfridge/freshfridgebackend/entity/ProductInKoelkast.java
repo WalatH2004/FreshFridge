@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class ProductInKoelkast {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pikId")
     private Integer pikId;
 
@@ -16,10 +17,6 @@ public class ProductInKoelkast {
 
     @Column(name = "toegevoegdOp", nullable = false)
     private LocalDate toegevoegdOp;
-
-    @ManyToOne
-    @JoinColumn(name = "scannerId", nullable = false)
-    private Scanner scanner;
 
     @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
@@ -54,14 +51,6 @@ public class ProductInKoelkast {
 
     public void setToegevoegdOp(LocalDate toegevoegdOp) {
         this.toegevoegdOp = toegevoegdOp;
-    }
-
-    public Scanner getScanner() {
-        return scanner;
-    }
-
-    public void setScanner(Scanner scanner) {
-        this.scanner = scanner;
     }
 
     public Product getProduct() {
