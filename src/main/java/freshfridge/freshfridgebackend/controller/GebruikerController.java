@@ -18,6 +18,11 @@ public class GebruikerController {
         this.gebruikerService = gebruikerService;
     }
 
+    @GetMapping
+    public List<Gebruiker> getAllGebruikers() {
+        return gebruikerService.getAllGebruikers();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Gebruiker> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(gebruikerService.getGebruiker(id));

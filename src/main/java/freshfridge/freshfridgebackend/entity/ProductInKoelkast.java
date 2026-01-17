@@ -19,10 +19,6 @@ public class ProductInKoelkast {
     private LocalDate toegevoegdOp;
 
     @ManyToOne
-    @JoinColumn(name = "scannerId", nullable = false)
-    private Scanner scanner;
-
-    @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
@@ -55,14 +51,6 @@ public class ProductInKoelkast {
 
     public void setToegevoegdOp(LocalDate toegevoegdOp) {
         this.toegevoegdOp = toegevoegdOp;
-    }
-
-    public Scanner getScanner() {
-        return scanner;
-    }
-
-    public void setScanner(Scanner scanner) {
-        this.scanner = scanner;
     }
 
     public Product getProduct() {

@@ -24,7 +24,9 @@ public class ScanController {
 
     @PostMapping("/scan")
     public ResponseEntity<ProductInKoelkast> scan(@RequestBody ScanRequest req) {
-        if (req.getBarcode() == null || req.getBarcode().isBlank()) {
+        if (req.getBarcode() == null || req.getBarcode().isBlank()
+                || req.getKoelkastId() == null
+                || req.getHoudbaarheidsdatum() == null) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -36,8 +38,7 @@ public class ScanController {
         ProductInKoelkast saved = pikService.addProductInKoelkast(
                 pik,
                 product.getProductId(),
-                req.getKoelkastId(),
-                req.getScannerId()
+                req.getKoelkastId()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
