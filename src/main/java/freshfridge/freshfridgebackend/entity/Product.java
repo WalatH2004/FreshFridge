@@ -17,10 +17,16 @@ public class Product {
     @Column(name = "barcode")
     private String barcode;
 
-    @Column(name = "categorie", nullable = false)
+    @Column(name = "categorie", nullable = false, length = 500)
     private String categorie;
 
-    public int getProductId() {
+    @Column(name = "imageUrl", length = 1000)
+    private String imageUrl;
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public Integer getProductId() {
         return productId;
     }
 

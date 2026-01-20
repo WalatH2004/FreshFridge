@@ -4,6 +4,9 @@ import freshfridge.freshfridgebackend.service.KoelkastService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import freshfridge.freshfridgebackend.dto.ProductInKoelkastResponse;
+import freshfridge.freshfridgebackend.entity.ProductInKoelkast;
+import freshfridge.freshfridgebackend.service.ProductInKoelkastService;
 
 import java.util.List;
 
@@ -12,9 +15,11 @@ import java.util.List;
 public class KoelkastController {
 
     private final KoelkastService koelkastService;
+    private final ProductInKoelkastService pikService;
 
-    public KoelkastController(KoelkastService koelkastService) {
+    public KoelkastController(KoelkastService koelkastService, ProductInKoelkastService pikService) {
         this.koelkastService = koelkastService;
+        this.pikService = pikService;
     }
 
     @PostMapping("/gebruiker/{gebruikernr}")
@@ -45,4 +50,25 @@ public class KoelkastController {
         koelkastService.deleteKoelkast(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{koelkastId}/producten")
+    public ResponseEntity<List<ProductInKoelkastResponse>> getProductenInKoelkast(@PathVariable Integer koelkastId) {
+        List<ProductInKoelkast> list = pikService.getProductenInKoelkast(koelkastId);
+
+        List<ProductInKoelkastResponse> resp = list.stream()
+                .map(pik -> new ProductInKoelkastResponse(
+                        pik.getPikId(),
+                        pik.getHoudbaarheidsdatum(),
+                        pik.getToegevoegdOp(),
+                        pik.getProduct().getProductId(),
+                        pik.getProduct().getBarcode(),
+                        pik.getProduct().getNaam(),
+                        pik.getProduct().getCategorie(),
+                        pik.getProduct().getImageUrl()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(resp);
+    }
+
 }

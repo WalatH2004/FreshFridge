@@ -1,6 +1,7 @@
 package freshfridge.freshfridgebackend.controller;
 
 import freshfridge.freshfridgebackend.dto.ScanRequest;
+import freshfridge.freshfridgebackend.dto.ScanResponse;
 import freshfridge.freshfridgebackend.entity.Product;
 import freshfridge.freshfridgebackend.entity.ProductInKoelkast;
 import freshfridge.freshfridgebackend.service.ProductInKoelkastService;
@@ -23,7 +24,7 @@ public class ScanController {
     }
 
     @PostMapping("/scan")
-    public ResponseEntity<ProductInKoelkast> scan(@RequestBody ScanRequest req) {
+    public ResponseEntity<ScanResponse> scan(@RequestBody ScanRequest req) {
         if (req.getBarcode() == null || req.getBarcode().isBlank()
                 || req.getKoelkastId() == null
                 || req.getHoudbaarheidsdatum() == null) {
@@ -41,6 +42,13 @@ public class ScanController {
                 req.getKoelkastId()
         );
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        ScanResponse resp = new ScanResponse();
+        resp.setProductId(product.getProductId() == null ? null : product.getProductId().longValue());
+        resp.setBarcode(product.getBarcode());
+        resp.setNaam(product.getNaam());
+        resp.setProductInKoelkastId(saved.getPikId() == null ? null : saved.getPikId().longValue());
+        resp.setImageUrl(product.getImageUrl());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 }
