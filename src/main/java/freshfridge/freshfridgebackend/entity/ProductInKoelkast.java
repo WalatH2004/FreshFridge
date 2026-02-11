@@ -26,6 +26,28 @@ public class ProductInKoelkast {
     @JoinColumn(name = "koelkastId", nullable = false)
     private Koelkast koelkast;
 
+    @Column(name = "aantal", nullable = false)
+    private Integer aantal = 1;
+
+    @Column(name = "laatste_notificatie_fase")
+    private Integer laatsteNotificatieFase = 0;
+
+    public Integer getLaatsteNotificatieFase() {
+        return laatsteNotificatieFase;
+    }
+
+    public void setLaatsteNotificatieFase(Integer laatsteNotificatieFase) {
+        this.laatsteNotificatieFase = laatsteNotificatieFase;
+    }
+
+    public Integer getAantal() {
+        return aantal;
+    }
+
+    public void setAantal(Integer aantal) {
+        this.aantal = aantal;
+    }
+
     public ProductInKoelkast() {
     }
 

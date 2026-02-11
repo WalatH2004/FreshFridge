@@ -2,8 +2,6 @@ package freshfridge.freshfridgebackend.controller;
 
 import freshfridge.freshfridgebackend.entity.Notificatie;
 import freshfridge.freshfridgebackend.service.NotificatieService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,26 +16,25 @@ public class NotificatieController {
         this.notificatieService = notificatieService;
     }
 
-    @PostMapping("/gebruiker/{gebruikernr}")
-    public ResponseEntity<Notificatie> add(@PathVariable Integer gebruikernr,
-                                           @RequestBody Notificatie notificatie) {
-        Notificatie saved = notificatieService.addNotificatie(notificatie, gebruikernr);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-    }
-
+    // Consistent met andere controllers (bv. /api/producten-in-koelkast/gebruiker/{gebruikernr})
     @GetMapping("/gebruiker/{gebruikernr}")
-    public ResponseEntity<List<Notificatie>> getByGebruiker(@PathVariable Integer gebruikernr) {
-        return ResponseEntity.ok(notificatieService.getNotificatiesVanGebruiker(gebruikernr));
+    public List<Notificatie> getForUser(@PathVariable Integer gebruikernr) {
+        return notificatieService.getForUser(gebruikernr);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Notificatie> getOne(@PathVariable Integer id) {
-        return ResponseEntity.ok(notificatieService.getNotificatie(id));
+    @GetMapping("/gebruiker/{gebruikernr}/unread-count")
+    public long unreadCount(@PathVariable Integer gebruikernr) {
+        return notificatieService.countUnread(gebruikernr);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        notificatieService.deleteNotificatie(id);
-        return ResponseEntity.noContent().build();
+    // Frontend gebruikt PUT; laat ook POST toe voor backwards compatibility.
+    @PutMapping("/{notificatieId}/read")
+    public void markAsReadPut(@PathVariable Integer notificatieId) {
+        notificatieService.markAsRead(notificatieId);
+    }
+
+    @PostMapping("/{notificatieId}/read")
+    public void markAsReadPost(@PathVariable Integer notificatieId) {
+        notificatieService.markAsRead(notificatieId);
     }
 }

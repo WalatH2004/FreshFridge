@@ -2,12 +2,13 @@ package freshfridge.freshfridgebackend.serviceImpl;
 
 import freshfridge.freshfridgebackend.entity.Gebruiker;
 import freshfridge.freshfridgebackend.entity.Notificatie;
-import freshfridge.freshfridgebackend.repository.GebruikerRepository;
+import freshfridge.freshfridgebackend.entity.NotificatieType;
 import freshfridge.freshfridgebackend.repository.NotificatieRepository;
 import freshfridge.freshfridgebackend.service.NotificatieService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -16,44 +17,52 @@ import java.util.List;
 public class NotificatieServiceImpl implements NotificatieService {
 
     private final NotificatieRepository notificatieRepository;
-    private final GebruikerRepository gebruikerRepository;
 
-    public NotificatieServiceImpl(NotificatieRepository notificatieRepository,
-                                  GebruikerRepository gebruikerRepository) {
+    public NotificatieServiceImpl(NotificatieRepository notificatieRepository) {
         this.notificatieRepository = notificatieRepository;
-        this.gebruikerRepository = gebruikerRepository;
     }
 
     @Override
-    public Notificatie addNotificatie(Notificatie notificatie, Integer gebruikernr) {
-        Gebruiker gebruiker = gebruikerRepository.findById(gebruikernr)
-                .orElseThrow(() -> new EntityNotFoundException("Gebruiker niet gevonden"));
+    public Notificatie create(Gebruiker gebruiker, NotificatieType type, String bericht, Integer referentiePikId, String triggerKey) {
 
-        if (notificatie.getTijd() == null || notificatie.getTijd().isBlank()) {
-            String tijd = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
-            notificatie.setTijd(tijd);
+        Integer gebruikernr = gebruiker.getGebruikernr();
+
+        // dedupe: als dezelfde trigger al bestaat, maak niets aan
+        if (triggerKey != null && referentiePikId != null) {
+            boolean exists = notificatieRepository.existsByGebruiker_GebruikernrAndTypeAndReferentiePikIdAndTriggerKey(
+                    gebruikernr, type, referentiePikId, triggerKey
+            );
+            if (exists) return null;
         }
 
-        notificatie.setGebruiker(gebruiker);
-        return notificatieRepository.save(notificatie);
+        Notificatie n = new Notificatie();
+        n.setGebruiker(gebruiker);
+        n.setType(type);
+        n.setBericht(bericht);
+        n.setDatum(LocalDate.now());
+        n.setTijd(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+        n.setGelezen(false);
+        n.setReferentiePikId(referentiePikId);
+        n.setTriggerKey(triggerKey);
+
+        return notificatieRepository.save(n);
     }
 
     @Override
-    public Notificatie getNotificatie(Integer notificatieId) {
-        return notificatieRepository.findById(notificatieId)
+    public List<Notificatie> getForUser(Integer gebruikernr) {
+        return notificatieRepository.findByGebruiker_GebruikernrOrderByNotificatieIdDesc(gebruikernr);
+    }
+
+    @Override
+    public long countUnread(Integer gebruikernr) {
+        return notificatieRepository.countByGebruiker_GebruikernrAndGelezenFalse(gebruikernr);
+    }
+
+    @Override
+    public void markAsRead(Integer notificatieId) {
+        Notificatie n = notificatieRepository.findById(notificatieId)
                 .orElseThrow(() -> new EntityNotFoundException("Notificatie niet gevonden"));
-    }
-
-    @Override
-    public List<Notificatie> getNotificatiesVanGebruiker(Integer gebruikernr) {
-        return notificatieRepository.findByGebruiker_Gebruikernr(gebruikernr);
-    }
-
-    @Override
-    public void deleteNotificatie(Integer notificatieId) {
-        if (!notificatieRepository.existsById(notificatieId)) {
-            throw new EntityNotFoundException("Notificatie niet gevonden");
-        }
-        notificatieRepository.deleteById(notificatieId);
+        n.setGelezen(true);
+        notificatieRepository.save(n);
     }
 }

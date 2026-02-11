@@ -64,8 +64,9 @@ public class KoelkastController {
                         pik.getProduct().getBarcode(),
                         pik.getProduct().getNaam(),
                         pik.getProduct().getCategorie(),
-                        pik.getProduct().getImageUrl()
-                ))
+                        pik.getProduct().getImageUrl(),
+                        pik.getAantal() == null ? 1 : pik.getAantal()
+                        ))
                 .toList();
 
         return ResponseEntity.ok(resp);

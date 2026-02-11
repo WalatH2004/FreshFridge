@@ -31,10 +31,13 @@ public class ScanController {
             return ResponseEntity.badRequest().build();
         }
 
+        int aantal = (req.getAantal() == null || req.getAantal() < 1) ? 1 : req.getAantal();
+
         Product product = productLookupService.getOrCreateByBarcode(req.getBarcode());
 
         ProductInKoelkast pik = new ProductInKoelkast();
         pik.setHoudbaarheidsdatum(req.getHoudbaarheidsdatum());
+        pik.setAantal(aantal);
 
         ProductInKoelkast saved = pikService.addProductInKoelkast(
                 pik,

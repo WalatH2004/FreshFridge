@@ -17,4 +17,6 @@ public interface ProductInKoelkastService {
     List<ProductInKoelkast> getProductenVanGebruiker(Integer gebruikernr);
 
     void deleteProductInKoelkast(Integer pikId);
+
+    void changeAantal(Integer pikId, int delta);
 }

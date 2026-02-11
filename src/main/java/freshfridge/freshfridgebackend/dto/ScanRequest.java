@@ -6,7 +6,14 @@ public class ScanRequest {
     private String barcode;
     private Integer koelkastId;
     private LocalDate houdbaarheidsdatum;
+    private Integer aantal ;
 
+    public Integer getAantal() {
+        return aantal;
+    }
+    public void setAantal(Integer aantal) {
+        this.aantal = aantal;
+    }
     public String getBarcode() { return barcode; }
     public void setBarcode(String barcode) { this.barcode = barcode; }
 

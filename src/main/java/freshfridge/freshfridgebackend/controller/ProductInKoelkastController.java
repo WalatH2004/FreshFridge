@@ -1,5 +1,6 @@
 package freshfridge.freshfridgebackend.controller;
 
+import freshfridge.freshfridgebackend.dto.QuantityDeltaRequest;
 import freshfridge.freshfridgebackend.entity.ProductInKoelkast;
 import freshfridge.freshfridgebackend.service.ProductInKoelkastService;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,13 @@ public class ProductInKoelkastController {
     @DeleteMapping("/{pikId}")
     public ResponseEntity<Void> delete(@PathVariable Integer pikId) {
         pikService.deleteProductInKoelkast(pikId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{pikId}/aantal")
+    public ResponseEntity<Void> changeAantal(@PathVariable Integer pikId, @RequestBody QuantityDeltaRequest req) {
+        int delta = (req.getDelta() == null) ? 0 : req.getDelta();
+        pikService.changeAantal(pikId, delta);
         return ResponseEntity.noContent().build();
     }
 }

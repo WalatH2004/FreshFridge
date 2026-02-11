@@ -12,6 +12,7 @@ public class ProductInKoelkastResponse {
     private String naam;
     private String categorie;
     private String imageUrl;
+    private int aantal;
 
     public ProductInKoelkastResponse() {}
 
@@ -23,7 +24,8 @@ public class ProductInKoelkastResponse {
             String barcode,
             String naam,
             String categorie,
-            String imageUrl
+            String imageUrl,
+            int aantal
     ) {
         this.pikId = pikId;
         this.houdbaarheidsdatum = houdbaarheidsdatum;
@@ -33,6 +35,15 @@ public class ProductInKoelkastResponse {
         this.naam = naam;
         this.categorie = categorie;
         this.imageUrl = imageUrl;
+        this.aantal = aantal;
+    }
+
+    public int getAantal() {
+        return aantal;
+    }
+
+    public void setAantal(int aantal) {
+        this.aantal = aantal;
     }
 
     public String getImageUrl() { return imageUrl; }
